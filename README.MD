@@ -232,6 +232,10 @@ The project is still in it's early phase and I intend on using it on some actual
 
 # Change log
 
+## v0.2.19
+(unofficial fork)
+Upgrade plantuml package to 2025.2 [Danil Davletov](https://github.com/danildavletov/)
+
 ## v0.2.18
 
 (unofficial fork)
