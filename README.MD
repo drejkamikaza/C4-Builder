@@ -1,3 +1,14 @@
+## UPD 2025-04-03 
+Install c4builder from current fork 
+(fixed npm install issues by [Andrej Kamikovski](https://github.com/drejkamikaza)):
+
+`npm i -g github:danildavletov/C4-Builder`
+
+For live preview in VS Code:
+- install [Plant UML extension](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
+- install [Java Runtime](http://java.com/en/download/) (the plugin works with Java)
+- install [Graphviz](http://www.graphviz.org/download/) (to render diagrams) or `brew install graphviz` for Mac
+
 # Overview
 
 c4builder is a lightweight nodejs cli tool for building, maintaining and sharing a software architecture project using only text.
@@ -220,6 +231,16 @@ I would like to bind the **build** phase to the C4 model. It could parse the dia
 The project is still in it's early phase and I intend on using it on some actual projects in order to find more use cases and fix bugs.
 
 # Change log
+
+## v0.2.18
+
+(unofficial fork)
+Upgrade plantuml package [Andrej Kamikovski](https://github.com/drejkamikaza)
+
+## v0.2.17
+
+(unofficial fork)
+Fix default npm install command for c4builder [Andrej Kamikovski](https://github.com/drejkamikaza)
 
 ## v0.2.16
 
