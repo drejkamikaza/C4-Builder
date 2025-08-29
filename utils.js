@@ -148,8 +148,12 @@ const plantumlVersions = [
     },
     {
         version: '1.2024.3',
-        isLatest: true,
         jar: 'plantuml.1.2024.3.jar'
+    },
+    {
+        version: '1.2025.2',
+        isLatest: true,
+        jar: 'plantuml-1.2025.2.jar'
     }
 ];
 
