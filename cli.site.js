@@ -1,9 +1,9 @@
-const chalk = require('chalk');
-const path = require('path');
-const express = require('express');
+import chalk from 'chalk';
+import path from 'path';
+import express from 'express';
 const app = express();
 
-module.exports = (currentConfiguration, program) => {
+export default (currentConfiguration, program) => {
     if (!currentConfiguration.DIST_FOLDER) return console.log(chalk.red('No destination folder configured'));
 
     const port = program.port || currentConfiguration.WEB_PORT;

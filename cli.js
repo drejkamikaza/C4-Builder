@@ -1,20 +1,25 @@
-const figlet = require('figlet');
-const program = require('commander');
-const package = require('./package.json');
-const chalk = require('chalk');
-const path = require('path');
+import figlet from 'figlet';
+import { Command } from 'commander';
+const program = new Command();
+import pkg from './package.json' with { type: 'json' };
+import chalk from 'chalk';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const Configstore = require('configstore');
+import Configstore from 'configstore';
 
-const cmdHelp = require('./cli.help');
-const cmdNewProject = require('./cli.new');
-const cmdList = require('./cli.list');
-const cmdSite = require('./cli.site');
-const cmdCollect = require('./cli.collect');
-const { build } = require('./build');
-const watch = require('node-watch');
+import cmdHelp from './cli.help.js';
+import cmdNewProject from './cli.new.js';
+import cmdList from './cli.list.js';
+import cmdSite from './cli.site.js';
+import cmdCollect from './cli.collect.js';
+import { build } from './build.js';
+import watch from 'node-watch';
 
-const { clearConsole } = require('./utils.js');
+import { clearConsole } from './utils.js';
 
 const intro = () => {
     console.log(chalk.blue(figlet.textSync('c4builder')));
@@ -56,61 +61,73 @@ const getOptions = (conf) => {
     };
 };
 
-module.exports = async () => {
+export default async () => {
+    const args = process.argv.slice(2);
+    const subcommand = args.find(a => !a.startsWith('-'));
+
     program
-        .version(package.version)
-        .option('new', 'create a new project from template')
-        .option('config', 'change configuration for the current directory')
-        .option('list', 'display the current configuration')
-        .option('reset', 'clear all configuration')
-        .option('site', 'serve the generated site')
+        .version(pkg.version)
         .option('-w, --watch', 'watch for changes and rebuild')
-        .option('docs', 'a brief explanation for the available configuration options')
         .option('-p, --port <n>', 'port used for serving the generated site', parseInt)
+        .allowUnknownOption()
         .parse(process.argv);
 
+    const opts = program.opts();
+
+    // Merge subcommand flags with commander option flags
+    const cmd = {
+        new:    subcommand === 'new',
+        config: subcommand === 'config',
+        list:   subcommand === 'list',
+        reset:  subcommand === 'reset',
+        site:   subcommand === 'site',
+        docs:   subcommand === 'docs',
+        watch:  opts.watch,
+        port:   opts.port,
+    };
+
     let conf = { get: () => {} };
-    if (!program.new)
+    if (!cmd.new)
         conf = new Configstore(
             process.cwd().split(path.sep).splice(1).join('_'),
             {},
             { configPath: path.join(process.cwd(), '.c4builder') }
         );
 
-    if (program.docs) return cmdHelp();
+    if (cmd.docs) return cmdHelp();
 
     //initial options
     let options = getOptions(conf);
 
-    if (program.new || program.config || !options.HAS_RUN) clearConsole();
+    if (cmd.new || cmd.config || !options.HAS_RUN) clearConsole();
 
     intro();
 
-    if (!options.HAS_RUN && !program.new) {
+    if (!options.HAS_RUN && !cmd.new) {
         console.log(
             `\nif you created the project using the 'c4model new' command you can just press enter and go with the default options to get a basic idea of how it works.\n`
         );
         console.log(`you can always change the configuration by running > c4builder config\n`);
     }
 
-    if (program.new) return cmdNewProject();
-    if (program.list) return cmdList(options);
+    if (cmd.new) return cmdNewProject();
+    if (cmd.list) return cmdList(options);
 
-    if (program.reset) {
+    if (cmd.reset) {
         conf.clear();
         console.log(`configuration was reset`);
         return;
     }
 
-    await cmdCollect(options, conf, program);
-    if (!program.config) {
+    await cmdCollect(options, conf, cmd);
+    if (!cmd.config) {
         conf.set('hasRun', true);
 
         let isBuilding = false;
         let attemptedWatchBuild = false;
         //get options after wizard
         options = getOptions(conf);
-        if (program.watch) {
+        if (cmd.watch) {
             watch(options.ROOT_FOLDER, { recursive: true }, async (evt, name) => {
                 // clearConsole();
                 // intro();
@@ -147,9 +164,9 @@ module.exports = async () => {
         await build(options, conf);
         isBuilding = false;
 
-        if (program.site) return await cmdSite(options, program);
+        if (cmd.site) return await cmdSite(options, cmd);
 
-        if (options.GENERATE_WEBSITE && !program.watch) {
+        if (options.GENERATE_WEBSITE && !cmd.watch) {
             console.log(chalk.gray('\nto view the generated website run'));
             console.log(`> c4builder site`);
         }

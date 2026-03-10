@@ -1,5 +1,5 @@
-const fs = require('fs');
-const zlib = require('node:zlib');
+import fs from 'fs';
+import zlib from 'node:zlib';
 
 const makeDirectory = (path) =>
     new Promise((resolve) => {
@@ -127,37 +127,17 @@ const clearConsole = () => {
 
 const plantumlVersions = [
     {
-        version: '1.2020.07',
-        jar: 'plantuml-1.2020.7.jar'
-    },
-    {
-        version: '1.2020.17',
-        jar: 'plantuml.1.2020.17.jar'
-    },
-    {
-        version: '1.2021.7',
-        jar: 'plantuml.1.2021.7.jar'
-    },
-    {
-        version: '1.2021.12',
-        jar: 'plantuml.1.2021.12.jar'
-    },
-    {
-        version: '1.2022.3',
-        jar: 'plantuml-1.2022.3.jar'
-    },
-    {
         version: '1.2024.3',
-        jar: 'plantuml.1.2024.3.jar'
+        jar: 'plantuml-1.2024.3.jar'
     },
     {
-        version: '1.2025.2',
+        version: '1.2026.2',
         isLatest: true,
-        jar: 'plantuml-1.2025.2.jar'
+        jar: 'plantuml-1.2026.2.jar'
     }
 ];
 
-module.exports = {
+export {
     makeDirectory,
     readFile,
     writeFile,

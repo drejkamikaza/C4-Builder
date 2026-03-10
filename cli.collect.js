@@ -1,9 +1,9 @@
-const inquirer = require('inquirer');
-const joi = require('joi');
-const fs = require('fs');
-const path = require('path');
-const chalk = require('chalk');
-const { plantumlVersions } = require('./utils');
+import inquirer from 'inquirer';
+import joi from 'joi';
+import fs from 'fs';
+import path from 'path';
+import chalk from 'chalk';
+import { plantumlVersions } from './utils.js';
 
 const validate = (schema) => (answers) => {
     //just in case
@@ -14,7 +14,8 @@ const validate = (schema) => (answers) => {
     }
 };
 
-module.exports = async (currentConfiguration, conf, program) => {
+export default async (currentConfiguration, conf, program) => {
+    let responses;
     if (!currentConfiguration.PROJECT_NAME || program.config) {
         responses = await inquirer.prompt({
             type: 'input',

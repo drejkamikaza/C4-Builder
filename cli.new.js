@@ -1,14 +1,18 @@
-const figlet = require('figlet');
-const inquirer = require('inquirer');
-const joi = require('joi');
-const chalk = require('chalk');
-const fs = require('fs');
-const path = require('path');
-const fsextra = require('fs-extra');
-const { plantumlVersions } = require('./utils');
-const Configstore = require('configstore');
+import figlet from 'figlet';
+import inquirer from 'inquirer';
+import joi from 'joi';
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
+import fsextra from 'fs-extra';
+import { plantumlVersions } from './utils.js';
+import Configstore from 'configstore';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const { readFile, writeFile, makeDirectory } = require('./utils.js');
+import { readFile, writeFile, makeDirectory } from './utils.js';
 
 const validate = (schema) => (answers) => {
     //just in case
@@ -83,7 +87,7 @@ const generateTemplate = async (dir, projectName, plantumlVersion) => {
     await build(dir);
 };
 
-module.exports = async () => {
+export default async () => {
     console.log('\nThis will create a new folder with the name of the project');
 
     let responses;
